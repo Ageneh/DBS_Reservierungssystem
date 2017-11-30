@@ -1,0 +1,82 @@
+Kino-Ticketsystem
+
+[..] = Primärschlüssel
+↑ = Fremdschlüssel
+
+regBenutzer(
+  Name,
+  Adresse,
+  [NutzerID]
+)
+Name(
+  VorName,
+  NachName
+)
+Adresse(
+  Straße,
+  HausNr,
+  Ort,
+  PLZ
+)
+Reservierung(
+  [ReservierungsID]
+)
+reserviertMitRabatt(
+  ↑NutzerID,
+  [↑ReservierungsID]
+)
+
+Platz(
+  [Reihe],
+  [PlatzNr],
+  Platzkategorie
+)
+Platzkategorie(
+  Sperrplatz,
+  Lodge,
+  ...
+)
+ReservierungBestehtAus(
+  [ReservierungsID],
+  [↑ProduktID],
+  [↑Datum],
+  [↑Uhrzeit],
+  [↑Saal],
+  [↑Reihe],
+  [↑PlatzNr]
+)
+
+Speisen(
+  [ProduktID],
+  ProduktBeschreibung
+)
+
+Vorstellung(
+  [Datum],
+  [Uhrzeit]
+)
+Film(
+  [Titel],
+  Genre,
+  Hauptdarsteller,
+  Spieldauer
+)
+VorstellungSpielt(
+  [Datum],
+  [Uhrzeit],
+  ↑Titel
+)
+
+Saal(
+  [Saalname]
+)
+SaalEnthält(
+  [SaalName],
+  ↑Reihe,
+  ↑PlatzNr
+)
+VorstellungInSaal(
+  ↑Saal,
+  [↑Datum],
+  [↑Uhrzeit]
+)
