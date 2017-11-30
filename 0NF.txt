@@ -31,11 +31,6 @@ Platz(
   [PlatzNr],
   Platzkategorie
 )
-Platzkategorie(
-  Sperrplatz,
-  Lodge,
-  ...
-)
 ReservierungBestehtAus(
   [ReservierungsID],
   [↑ProduktID],
