@@ -1,0 +1,13 @@
+
+// Hier sehen Sie die Entität(en), welche durch die Normalisierung (in erste NF) verändert wurden.
+
+regBenutzer(
+    VorName,
+    NachName,
+    Straße,
+    HausNr,
+    Ort,
+    PLZ,
+    [NutzerID]
+)
+Adresse & Name -> aufgelöst
