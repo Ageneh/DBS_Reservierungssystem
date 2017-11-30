@@ -1,0 +1,77 @@
+## 1NF
+regBenutzer(
+    [NutzerID],
+    VorName,
+    NachName,
+    Straße,
+    HausNr,
+    Ort,
+    PLZ
+)
+.
+.
+
+
+## 2NF
+regBenutzer:
+##Neue Tabelle für Beziehung zw. PLZ und Ort in regBenutzer
+Postleitzahl(
+    [PLZ],
+    Ort
+)
+
+## 3NF
+Relation regBenutzer zu Reservierung:
+##Integration der Attribute und Schlüssel in Reservierung
+Reservierung(
+    RabattMenge,
+    ↑NutzerID,
+    [ReservierungsID]
+)
+
+Relation Saal zu Platz:
+Saal(
+    [SaalName]
+)
+Platz(
+    [Reihe],
+    [PlatzNr],
+    Platzkategorie
+)
+Saal_enthält(
+    [SaalName],
+    ↑Reihe,
+    ↑PlatzNr
+)
+
+Relation Vorstellung zu Film:
+##Integration des Schlüssels aus Film in Vorstellung.
+Vorstellung_spielt(
+    [Datum],
+    [Uhrzeit],
+    ↑Titel
+)
+
+& Relation Vorstellung zu Saal:
+Vorstellung_in(
+    [Datum],
+    [Uhrzeit],
+    ↑SaalName
+)
+=> Relation Vorstellung zu Film und Saal
+Vorstellung(
+    [Datum],
+    [Uhrzeit],
+    ↑Titel,
+    ↑SaalName
+)
+
+Relation Reservierung zu Vorstellung, Platz und Speisen:
+Reservierung_enthält(
+    [↑ReservierungsID],
+    [↑Datum],
+    [↑Uhrzeit]
+    [↑Reihe],
+    [↑PlatzNr],
+    [↑ProduktID]
+)
