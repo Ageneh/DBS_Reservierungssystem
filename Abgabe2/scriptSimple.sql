@@ -39,6 +39,8 @@ CREATE TABLE film(
 	    spieldauer TIME(2)
 );
 INSERT INTO film VALUES('Shutter Island', 'Leonardo DiCaprio', 'Thriller', '01:20:12');
+INSERT INTO film VALUES('Star Wars: Die letzten Jedi', 'Mark Hamill, John Boyega, Daisy Ridley', 'Science-Fiction-Film', '02:32:12');
+INSERT INTO film VALUES('Loving Vincent', 'Douglas Booth, Holly Earl', 'Animations- & Zeichentrickfilm', '01:35:23');
 
 ----mit references
 -- + plz
@@ -120,29 +122,6 @@ CREATE TABLE reservierung(
     FOREIGN KEY (vorstellungID) REFERENCES vorstellung(vorstellungID),
     FOREIGN KEY (produktID) REFERENCES speisen(produktID)
 );
-drop function reserviere(CHAR, CHAR, NUMERIC, NUMERIC, NUMERIC);
-CREATE OR REPLACE FUNCTION reserviere(nID CHAR, vID CHAR, reihe NUMERIC, sitz NUMERIC, sitzENd NUMERIC)
-RETURNS TEXT AS $$
-  DECLARE
-    id CHAR(18) = 'RES' || $2 || $1;
-    reihe NUMERIC(2,0) = $3;
-    sitz NUMERIC(2,0) = $4;
-    delim CHAR(2) = ', ';
-    max INT = $5;
-    ret_str VARCHAR(80) = $1 || delim || id || delim || $2 || delim || $3 || delim || $4;
-  BEGIN
-  IF reihe IS NOT NULL AND sitz IS NOT NULL THEN
-    IF max IS NOT NULL AND max > sitz THEN
-      WHILE sitz <= max LOOP
-        INSERT INTO reservierung(nutzerID, reservierungsID, vorstellungID, reihe, sitz) VALUES($1, id, $2, $3, sitz);
-        sitz := sitz + 1;
-      END LOOP;
-    END IF;
-  END IF;
-  RETURN max;
-  END
-$$
-LANGUAGE 'plpgsql';
 drop function reserviere(CHAR, CHAR, NUMERIC, NUMERIC);
 CREATE OR REPLACE FUNCTION reserviere(nID CHAR, vID CHAR, reihe NUMERIC, sitz NUMERIC)
 RETURNS TEXT AS $$
@@ -151,20 +130,12 @@ RETURNS TEXT AS $$
     reihe NUMERIC(2,0) = $3;
     sitz NUMERIC(2,0) = $4;
     delim CHAR(2) = ', ';
-    max INT = $5;
     ret_str VARCHAR(80) = $1 || delim || id || delim || $2 || delim || $3 || delim || $4;
   BEGIN
   IF reihe IS NOT NULL AND sitz IS NOT NULL THEN
-    IF max IS NOT NULL AND max > sitz THEN
-      WHILE sitz <= max LOOP
-        INSERT INTO reservierung(nutzerID, reservierungsID, vorstellungID, reihe, sitz) VALUES($1, id, $2, $3, sitz);
-        sitz := sitz + 1;
-      END LOOP;
-    END IF;
-    ELSE
-      INSERT INTO reservierung(nutzerID, reservierungsID, vorstellungID, reihe, sitz) VALUES($1, id, $2, $3, $4);
+    INSERT INTO reservierung(nutzerID, reservierungsID, vorstellungID, reihe, sitz) VALUES($1, id, $2, $3, $4);
   END IF;
-  RETURN max;
+	RETURN ret_str;
   END
 $$
 LANGUAGE 'plpgsql';
@@ -174,11 +145,11 @@ SELECT * FROM reservierung;
 ---------reserviere(CHAR, CHAR, NUMERIC, NUMERIC)
 
 SELECT * FROM regBenutzer;
-SELECT reserviere('RudiRud', 'VSI005', 2,1, 7);
+SELECT reserviere('RudiRud', 'VSI005', 2,1);
 SELECT * FROM reservierung;
 SELECT reserviere('SteLos', 'VSI003', 5,6);
 SELECT * FROM reservierung;
-SELECT reserviere('RudiRud', 'VSI002', 5,6, 7);
+SELECT reserviere('RudiRud', 'VSI002', 5,6);
 SELECT * FROM reservierung;
 
 --------
