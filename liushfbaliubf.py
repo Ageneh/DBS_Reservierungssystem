@@ -1,7 +1,6 @@
 '''
 Created on 29.01.2018
 
-@author: hareg001
 '''
 
 string = "INSERT INTO platz(saalName, reihe, sitz) VALUES(\'{}\', {}, {});"
